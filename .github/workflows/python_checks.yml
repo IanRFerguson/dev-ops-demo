@@ -1,0 +1,49 @@
+name: python_checks
+
+on:
+  pull_request:
+    branches: ["main"]
+
+jobs:
+  python_qa_with_ruff:
+    runs-on: macos-latest
+    steps:
+      - name: Checkout Branch
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Get Python Changes
+        id: changed-python-files
+        uses: tj-actions/changed-files@v41
+        with:
+          files: **.py
+
+      - name: Setup Formatting Environment
+        if: steps.changed-python-files.outputs.any_changed == 'true'
+        uses: actions/setup-python@v3
+        with:
+          python-version: "3.10"
+        run: python -m pip install ruff
+
+      - name: QA
+        if: steps.changed-python-files.outputs.any_changed == 'true'
+        run: ruff check --output-format=github .
+        
+
+  run_all_unit_tests:
+    runs-on: macos-latest
+    steps:
+      - name: Checkout Branch
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Setup Test Environment
+        uses: actions/setup-python@v3
+        with:
+          python-version: "3.10"
+        run: python -m pip install pytest
+
+      - name: Run Tests
+        run: python -m pytest -rf tests/*
