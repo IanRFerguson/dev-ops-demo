@@ -2,7 +2,7 @@ name: docker_build
 
 on:
   push:
-    branches: ["main", "ian/wip"]
+    branches: ["main"]
 
 jobs:
   docker_deploy:
