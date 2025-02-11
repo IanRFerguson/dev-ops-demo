@@ -4,6 +4,10 @@ import unittest
 
 
 class MyTestCase(unittest.TestCase):
+    """
+    Super basic TestCase instance
+    """
+
     def test__dummy_v1(self):
         my_var = "foo"
 
